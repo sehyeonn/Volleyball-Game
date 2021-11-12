@@ -7,7 +7,7 @@ import javax.swing.JLabel;
 public class Player extends JLabel {
 	/*
 	 * 플레이어 클래스 구현
-	 * 점프 이동 구현
+	 * 점프 및 이동 구현
 	 */
 	private Player player = this;
 	private int whatPlayer;		// 왼쪽 플레이어인지 오른쪽 플레이어인지 구분
@@ -34,7 +34,7 @@ public class Player extends JLabel {
 
 	private ImageIcon playerImage, playerJumpImage;		// 플레이어 이미지, 점프 이미지
 
-	// 플레이어 생성자
+	// 플레이어 생성자, 오른쪽 플레이어(1) 왼쪽 플레이어(2)를 매개 변수로 받아 처음 위치 지정
 	public Player(int p) {
 		if(p == RIGHT_PLAYER) {
 			setLocation(RIGHT_P_X, PLAYER_Y);	// 오른쪽 플레이어 위치 지정
@@ -46,6 +46,7 @@ public class Player extends JLabel {
 		}
 
 		setIcon(playerImage);	// 플레이어 이미지 설정
+		addKeyListener(new PlayerKeyListener());	// 키보드 리스너 달기
 
 		playerImage = new ImageIcon("player.png");
 		playerJumpImage = new ImageIcon("player_jump.png");
@@ -69,7 +70,11 @@ public class Player extends JLabel {
 	}
 	
 	public void jump() {
-		
+		Thread th = new JumpThread();
+		if(isJump == false) {
+			System.out.println((whatPlayer==RIGHT_PLAYER ? "right" : "left") + "player jump");
+			th.start();
+		}		
 	}
 	
 	// 왼쪽 이동 스레드
@@ -102,7 +107,21 @@ public class Player extends JLabel {
 	private class JumpThread extends Thread {
 		@Override
 		public void run() {
+			isJump = true;
+			isFall = false;
+			// 점프
+			player.setIcon(playerJumpImage);	// 플레이어 점프 이미지로 변경
+			while(player.getY() >= PLAYER_Y - PLAYER_JUMP) {
+				player.setLocation(player.getX(), player.getY() - PLAYER_UNIT);
+			}
 			
+			isFall = true;
+			isJump = false;
+			// 점프 후 떨어짐
+			while(player.getY() <= PLAYER_Y) {
+				player.setLocation(player.getX(), player.getY() + PLAYER_UNIT);
+			}
+			player.setIcon(playerImage);	// 플레이어 이미지 원래대로
 		}
 	}
 	
@@ -117,17 +136,59 @@ public class Player extends JLabel {
 	private class PlayerKeyListener extends KeyAdapter {
 		@Override
 		public void keyPressed(KeyEvent e) {
-			if(e.getKeyChar() == 'q')
-				System.exit(0);
-
-			int keyCode = e.getKeyCode();
-			switch(keyCode) {
-				case KeyEvent.VK_UP:	// �젏�봽
-					player.setLocation(player.getX(), player.getY()-PLAYER_JUMP); break;
+			// 오른쪽 플레이어 키 누름
+			if(whatPlayer == 1) {				
+				int keyCode = e.getKeyCode();
+				switch(keyCode) {
+				case KeyEvent.VK_UP:
+					player.jump(); break;
 				case KeyEvent.VK_LEFT:
-					player.setLocation(player.getX()-PLAYER_UNIT, player.getY()); break;
+					player.moveLeft(); break;
 				case KeyEvent.VK_RIGHT:
-					player.setLocation(player.getX()+PLAYER_UNIT, player.getY()); break;
+					player.moveRight(); break;
+				}
+			}
+			
+			// 왼쪽 플레이어 키 누름
+			else {
+				int keyCode = e.getKeyChar();
+				switch(keyCode) {
+					case 'w':
+						player.jump(); break;
+					case 'a':
+						player.moveLeft(); break;
+					case 'd':
+						player.moveRight(); break;
+				}
+			}
+		}
+		
+		@Override
+		public void keyReleased(KeyEvent e) {
+			// 오른쪽 플레이어 키 뗌
+			if(whatPlayer == 1) {				
+				int keyCode = e.getKeyCode();
+				switch(keyCode) {
+				case KeyEvent.VK_UP:
+					player.isJump = false; break;
+				case KeyEvent.VK_LEFT:
+					player.isLeft = false; break;
+				case KeyEvent.VK_RIGHT:
+					player.isRight = false; break;
+				}
+			}
+			
+			// 왼쪽 플레이어 키 뗌
+			else {
+				int keyCode = e.getKeyChar();
+				switch(keyCode) {
+					case 'w':
+						player.isJump = false; break;
+					case 'a':
+						player.isLeft = false; break;
+					case 'd':
+						player.isRight = false; break;
+				}
 			}
 		}
 	}
