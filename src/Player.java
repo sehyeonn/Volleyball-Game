@@ -44,12 +44,16 @@ public class Player extends JLabel {
 			setLocation(LEFT_P_X, PLAYER_Y);	// 왼쪽 플레이어 위치 지정
 			whatPlayer = LEFT_PLAYER;
 		}
-
-		setIcon(playerImage);	// 플레이어 이미지 설정
-		addKeyListener(new PlayerKeyListener());	// 키보드 리스너 달기
-
+		
 		playerImage = new ImageIcon("player.png");
 		playerJumpImage = new ImageIcon("player_jump.png");
+		
+		setSize(playerImage.getIconWidth(), playerImage.getIconHeight());
+		setIcon(playerImage);	// 플레이어 이미지 설정
+		addKeyListener(new PlayerKeyListener());	// 키보드 리스너 달기
+		
+		this.requestFocus();
+		this.setFocusable(true);
 	}
 
 	
@@ -85,8 +89,10 @@ public class Player extends JLabel {
 			isLeft = true;
 			
 			// isLeft가 true일 동안 이동
-			while(isLeft == true)
+			while(isLeft == true) {
 				player.setLocation(player.getX() - PLAYER_UNIT, player.getY());
+				player.repaint();
+			}
 		}
 	}
 	
