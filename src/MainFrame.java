@@ -1,4 +1,5 @@
 import java.awt.Container;
+
 import javax.swing.JFrame;
 
 /*
@@ -7,15 +8,15 @@ import javax.swing.JFrame;
 
 public class MainFrame extends JFrame {
 	private GamePanel gamePanel = new GamePanel();
-	
+
 	public MainFrame() {
 		setTitle("Valleyball game");
-		
+
 		Container c = getContentPane();
 		c.setLayout(null);
-		c.add(new Player(1));
-		
-		setSize(1200, 700);
+		c.add(gamePanel);
+
+		setSize(1600, 800);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
 	}
