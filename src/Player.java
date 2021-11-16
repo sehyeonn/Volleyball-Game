@@ -59,7 +59,7 @@ public class Player {
 			isJump = true;
 			isFall = false;
 			// 점프
-			tk.getImage("player_jump.png");	// 플레이어 점프 이미지로 변경
+			img = tk.getImage("player_jump.png");	// 플레이어 점프 이미지로 변경
 			while(y >= groundY - PLAYER_JUMP) {
 				y = y - PLAYER_UNIT;
 				try {
@@ -81,7 +81,7 @@ public class Player {
 				}
 			}
 			isFall = false;
-			tk.getImage("player.png");;	// 플레이어 이미지 원래대로
+			img = tk.getImage("player.png");;	// 플레이어 이미지 원래대로
 		}
 	}
 
