@@ -1,7 +1,7 @@
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 import javax.swing.JPanel;
 
@@ -10,7 +10,7 @@ import javax.swing.JPanel;
  * 게임에 필요한 요소들 부착
  */
 
-public class GamePanel extends JPanel implements KeyListener, Runnable {
+public class GamePanel extends JPanel {
 	private Player rightPlayer = new Player(1);
 	private Player leftPlayer = new Player(2);
 	private Ball ball;
@@ -18,7 +18,9 @@ public class GamePanel extends JPanel implements KeyListener, Runnable {
 	Image buffImg;
 	Graphics buffG;
 
-	Thread th = new Thread(this);
+	private PlayerController playerController = new PlayerController();
+	Thread th = new Thread(playerController);
+
 	boolean rightKeyUp;
     boolean rightKeyLeft;
     boolean rightKeyRight;
@@ -30,92 +32,9 @@ public class GamePanel extends JPanel implements KeyListener, Runnable {
 		setLayout(null);
 		setSize(1600, 800);
 		th.start();
-		addKeyListener(this);
+		addKeyListener(playerController);
 		this.requestFocus();
 		this.setFocusable(true);
-	}
-
-	// 키에 대한 처리.
-    public void keyProcess() {
-    	if(rightKeyLeft) {
-    		if(rightPlayer.x > getWidth()/2)
-    			rightPlayer.x -= rightPlayer.PLAYER_UNIT;
-    	}
-
-    	if(rightKeyRight) {
-    		if(rightPlayer.x < getWidth() - rightPlayer.width)
-    			rightPlayer.x += rightPlayer.PLAYER_UNIT;
-    	}
-
-    	if(leftKeyLeft) {
-    		if(leftPlayer.x > 0)
-    			leftPlayer.x -= leftPlayer.PLAYER_UNIT;
-    	}
-
-    	if(leftKeyRight) {
-    		if(leftPlayer.x < getWidth()/2 - leftPlayer.width)
-    			leftPlayer.x += leftPlayer.PLAYER_UNIT;
-    	}
-    }
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		switch (e.getKeyCode()) {	// 오른쪽 플레이어 키 입력
-	        case KeyEvent.VK_UP :
-	            rightPlayer.jump();
-	            break;
-	        case KeyEvent.VK_LEFT :
-	            rightKeyLeft = true;
-	            break;
-	        case KeyEvent.VK_RIGHT :
-	            rightKeyRight = true;
-	            break;
-	    }
-	    switch (e.getKeyCode()) {	// 왼쪽 플레이어 키 입력
-	        case KeyEvent.VK_W :
-	            leftPlayer.jump();
-	            break;
-	        case KeyEvent.VK_A :
-	            leftKeyLeft = true;
-	            break;
-	        case KeyEvent.VK_D :
-	            leftKeyRight = true;
-	            break;
-	    }
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		switch (e.getKeyCode()) {	// 오른쪽 플레이어 키 뗌
-	        case KeyEvent.VK_LEFT :
-	            rightKeyLeft = false;
-	            break;
-	        case KeyEvent.VK_RIGHT :
-	            rightKeyRight = false;
-	            break;
-	    }
-	    switch (e.getKeyCode()) {	// 왼쪽 플레이어 키 뗌
-	        case KeyEvent.VK_A :
-	            leftKeyLeft = false;
-	            break;
-	        case KeyEvent.VK_D :
-	            leftKeyRight = false;
-	            break;
-	    }
-	}
-	@Override
-	public void keyTyped(KeyEvent e) {}
-
-	@Override
-	public void run() {
-		try {
-    		while(true) {
-    			keyProcess();
-    			Thread.sleep(7);
-    		}
-    	} catch (Exception e){
-    		e.printStackTrace();
-    	}
 	}
 
 	@Override
@@ -132,5 +51,91 @@ public class GamePanel extends JPanel implements KeyListener, Runnable {
 		buffG.drawImage(leftPlayer.img, leftPlayer.x, leftPlayer.y, this);
 		g.drawImage(buffImg, 0, 0, this); // 화면 버퍼(buffG)에 그려진 이미지(buffImg)옮김. ( 도화지에 이미지를 출력 )
 		repaint();
+	}
+
+
+
+	// 플레이어 이동 및 점프를 위한 키리스너
+	class PlayerController extends KeyAdapter implements Runnable {
+		// 키에 대한 처리.
+		public void keyProcess() {
+			if(rightKeyLeft) {
+				if(rightPlayer.x > getWidth()/2)
+					rightPlayer.x -= rightPlayer.PLAYER_UNIT;
+			}
+
+			if(rightKeyRight) {
+				if(rightPlayer.x < getWidth() - rightPlayer.width)
+					rightPlayer.x += rightPlayer.PLAYER_UNIT;
+			}
+
+			if(leftKeyLeft) {
+				if(leftPlayer.x > 0)
+					leftPlayer.x -= leftPlayer.PLAYER_UNIT;
+			}
+
+			if(leftKeyRight) {
+				if(leftPlayer.x < getWidth()/2 - leftPlayer.width)
+					leftPlayer.x += leftPlayer.PLAYER_UNIT;
+			}
+		}
+
+		@Override
+		public void keyPressed(KeyEvent e) {
+			switch (e.getKeyCode()) {	// 오른쪽 플레이어 키 입력
+			case KeyEvent.VK_UP :
+				rightPlayer.jump();
+				break;
+			case KeyEvent.VK_LEFT :
+				rightKeyLeft = true;
+				break;
+			case KeyEvent.VK_RIGHT :
+				rightKeyRight = true;
+				break;
+			}
+			switch (e.getKeyCode()) {	// 왼쪽 플레이어 키 입력
+			case KeyEvent.VK_W :
+				leftPlayer.jump();
+				break;
+			case KeyEvent.VK_A :
+				leftKeyLeft = true;
+				break;
+			case KeyEvent.VK_D :
+				leftKeyRight = true;
+				break;
+			}
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			switch (e.getKeyCode()) {	// 오른쪽 플레이어 키 뗌
+			case KeyEvent.VK_LEFT :
+				rightKeyLeft = false;
+				break;
+			case KeyEvent.VK_RIGHT :
+				rightKeyRight = false;
+				break;
+			}
+			switch (e.getKeyCode()) {	// 왼쪽 플레이어 키 뗌
+			case KeyEvent.VK_A :
+				leftKeyLeft = false;
+				break;
+			case KeyEvent.VK_D :
+				leftKeyRight = false;
+				break;
+			}
+		}
+
+		@Override
+		public void run() {
+			try {
+				while(true) {
+					keyProcess();
+					Thread.sleep(10);
+				}
+			} catch (Exception e){
+				e.printStackTrace();
+			}
+		}
 	}
 }
