@@ -8,14 +8,16 @@ public class Player {
 	 * 점프 기능 따로 구현
 	 */
 	final int PLAYER_UNIT = 5;		// 플레이어 이동 속도
-	private final int PLAYER_JUMP = 200;	// 플레이어 점프 높이
+	private final int PLAYER_JUMP = 230;	// 플레이어 점프 높이
 
-	private int whatPlayer;		// 왼쪽 플레이어인지 오른쪽 플레이어인지 구분
+	int whatPlayer;		// 왼쪽 플레이어인지 오른쪽 플레이어인지 구분
 	private final int RIGHT_PLAYER = 1;		// 오른쪽 플레이어
 	private final int LEFT_PLAYER = 2;		// 왼쪽 플레이어
 
 	int x;	// 플레이어 x좌표
 	int y;	// 플레이어 y좌표
+	int groundY;	// 플레이어가 서 있는 바닥을 나타내는 y좌표
+
 	Image img;
 	Toolkit tk = Toolkit.getDefaultToolkit();
 	int width;
@@ -37,18 +39,17 @@ public class Player {
 			y = 550;
 			whatPlayer = LEFT_PLAYER;
 		}
+		groundY = 550;
 
 		img = tk.getImage("player.png");
-		width = img.getWidth(null);
-		height = img.getHeight(null);
+		width = 151;
+		height = 151;
 	}
 
 	public void jump() {
 		Thread th = new JumpThread();
-		if(isJump == false && isFall == false) {
-			System.out.println((whatPlayer==RIGHT_PLAYER ? "right" : "left") + "player jump");
+		if(isJump == false && isFall == false)
 			th.start();
-		}
 	}
 
 	// 점프 스레드
@@ -59,10 +60,10 @@ public class Player {
 			isFall = false;
 			// 점프
 			tk.getImage("player_jump.png");	// 플레이어 점프 이미지로 변경
-			while(y >= y - PLAYER_JUMP) {
+			while(y >= groundY - PLAYER_JUMP) {
 				y = y - PLAYER_UNIT;
 				try {
-					Thread.sleep(PLAYER_UNIT);
+					Thread.sleep(7);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -71,10 +72,10 @@ public class Player {
 			isFall = true;
 			isJump = false;
 			// 점프 후 떨어짐
-			while(y <= y - PLAYER_JUMP) {
+			while(y <= groundY) {
 				y = y + PLAYER_UNIT;
 				try {
-					Thread.sleep(PLAYER_UNIT);
+					Thread.sleep(7);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

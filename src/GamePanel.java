@@ -30,27 +30,30 @@ public class GamePanel extends JPanel implements KeyListener, Runnable {
 		setLayout(null);
 		setSize(1600, 800);
 		th.start();
+		addKeyListener(this);
+		this.requestFocus();
+		this.setFocusable(true);
 	}
 
 	// 키에 대한 처리.
     public void keyProcess() {
-    	if(this.rightKeyLeft) {
+    	if(rightKeyLeft) {
     		if(rightPlayer.x > getWidth()/2)
     			rightPlayer.x -= rightPlayer.PLAYER_UNIT;
     	}
 
-    	if(this.rightKeyRight) {
-    		if(rightPlayer.x < getWidth())
+    	if(rightKeyRight) {
+    		if(rightPlayer.x < getWidth() - rightPlayer.width)
     			rightPlayer.x += rightPlayer.PLAYER_UNIT;
     	}
 
-    	if(this.leftKeyLeft) {
+    	if(leftKeyLeft) {
     		if(leftPlayer.x > 0)
     			leftPlayer.x -= leftPlayer.PLAYER_UNIT;
     	}
 
-    	if(this.leftKeyRight) {
-    		if(leftPlayer.x < getWidth()/2)
+    	if(leftKeyRight) {
+    		if(leftPlayer.x < getWidth()/2 - leftPlayer.width)
     			leftPlayer.x += leftPlayer.PLAYER_UNIT;
     	}
     }
@@ -108,7 +111,7 @@ public class GamePanel extends JPanel implements KeyListener, Runnable {
 		try {
     		while(true) {
     			keyProcess();
-    			Thread.sleep(5);
+    			Thread.sleep(7);
     		}
     	} catch (Exception e){
     		e.printStackTrace();
