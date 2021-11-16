@@ -41,7 +41,7 @@ public class Player {
 		}
 		groundY = 550;
 
-		img = tk.getImage("player.png");
+		img = tk.getImage("player_removebg.png");
 		width = 151;
 		height = 151;
 	}
@@ -59,7 +59,7 @@ public class Player {
 			isJump = true;
 			isFall = false;
 			// 점프
-			img = tk.getImage("player_jump.png");	// 플레이어 점프 이미지로 변경
+			img = tk.getImage("player_jump_removebg.png");	// 플레이어 점프 이미지로 변경
 			while(y >= groundY - PLAYER_JUMP) {
 				y = y - PLAYER_UNIT;
 				try {
@@ -75,13 +75,13 @@ public class Player {
 			while(y <= groundY) {
 				y = y + PLAYER_UNIT;
 				try {
-					Thread.sleep(7);
+					Thread.sleep(6);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
 			isFall = false;
-			img = tk.getImage("player.png");;	// 플레이어 이미지 원래대로
+			img = tk.getImage("player_removebg.png");;	// 플레이어 이미지 원래대로
 		}
 	}
 

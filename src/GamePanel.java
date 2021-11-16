@@ -131,7 +131,7 @@ public class GamePanel extends JPanel {
 			try {
 				while(true) {
 					keyProcess();
-					Thread.sleep(10);
+					Thread.sleep(7);
 				}
 			} catch (Exception e){
 				e.printStackTrace();
