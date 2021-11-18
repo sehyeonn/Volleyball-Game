@@ -16,7 +16,7 @@ public class MainFrame extends JFrame {
 		c.setLayout(null);
 		c.add(gamePanel);
 
-		setSize(1600, 800);
+		setSize(1500, 1000);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
 	}
