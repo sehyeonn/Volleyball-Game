@@ -14,6 +14,8 @@ public class Ball {
 	int moveX;	// 공 이동 시 x 증가값
 	int moveY;	// 공 이동 시 y 증가값
 
+	int gravity = 0;
+
 	Image img;
 	Toolkit tk = Toolkit.getDefaultToolkit();
 
@@ -41,5 +43,6 @@ public class Ball {
 		y = 200;
 		moveX = 0;
 		moveY = BALL_UNIT;
+		gravity = 0;
 	}
 }

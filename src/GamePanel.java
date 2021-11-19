@@ -60,10 +60,11 @@ public class GamePanel extends JPanel {
 	private void gameReset(Player winnerPlayer) {
 		try {
 			Thread.sleep(1000);
+			rightPlayer.playerSet();
+			leftPlayer.playerSet();
+			ball.ballSet(winnerPlayer);
+			Thread.sleep(1000);
 		} catch (InterruptedException e) { e.printStackTrace(); }
-		rightPlayer.playerSet();
-		leftPlayer.playerSet();
-		ball.ballSet(winnerPlayer);
 	}
 
 	private void gameFinish(Player winnerPlayer) {
@@ -100,12 +101,13 @@ public class GamePanel extends JPanel {
 		buffG.drawImage(ball.img, ball.x, ball.y, this);
 
 		g.drawImage(buffImg, 0, 0, this); // 화면 버퍼(buffG)에 그려진 이미지(buffImg)옮김. ( 도화지에 이미지를 출력 )
-		update(g);
+//		update(g);
 	}
 
 	@Override
 	public void update(Graphics g) {
-		repaint();
+//		repaint();
+		paint(g);
 	}
 
 
@@ -139,51 +141,47 @@ public class GamePanel extends JPanel {
 				if(ballRightPlayerDistance <= rightPlayer.width/2 + ball.width/2) {
 					ball.moveX = (ballCenterX - rightPlayerCenterX)/3/7;
 					ball.moveY = (ballCenterY - rightPlayerCenterY)/3/7;
+					ball.gravity = 0;	// 플레이어와 충돌 시 공 중력 초기화
 				}
 				if(ballLeftPlayerDistance <= leftPlayer.width/2 + ball.width/2) {
 					ball.moveX = (ballCenterX - leftPlayerCenterX)/3/7;
 					ball.moveY = (ballCenterY - leftPlayerCenterY)/3/7;
+					ball.gravity = 0;	// 플레이어와 충돌 시 공 중력 초기화
 				}
 
 				// 공이 벽과 충돌할 경우
-				if(ball.y <= 0)
-					ball.moveY = -ball.moveY;
-				if(ball.x <= 0)
+//				if(ball.y <= 0) {		// 천장 충돌
+//					ball.moveY = -ball.moveY;
+//					ball.gravity = 0;	// 천장과 충돌 시 공 중력 초기화
+//				}
+				if(ball.x <= 0)		// 왼쪽 벽 충돌
 					ball.moveX = -ball.moveX;
-				if(ball.x >= getWidth() - ball.width)
+				if(ball.x >= getWidth() - ball.width)	// 오른쪽 벽 충돌
 					ball.moveX = -ball.moveX;
 
 				// 네트와 충돌할 경우
-				if(ball.x <= getWidth()/2+10 && ball.x >= getWidth()/2-10 && ball.y + ball.height/2 >= getHeight()-400)
+				if((ball.x <= getWidth()/2+10 && ball.x >= getWidth()/2-10) && ball.y + ball.height/2 >= getHeight()-400)
 					ball.moveX = -ball.moveX;
-				if(ball.x + ball.width >= getWidth()/2-10 && ball.x + ball.width <= getWidth()/2 && ball.y + ball.height/2 >= getHeight()-400)
+				if((ball.x + ball.width >= getWidth()/2-10 && ball.x + ball.width <= getWidth()/2) && ball.y + ball.height/2 >= getHeight()-400)
 					ball.moveX = -ball.moveX;
 
 				// 공이 바닥에 닿을 경우
 				if(ball.y >= getHeight() - floor - ball.height) {
-					try {
-						if(ball.x >= 0 && ball.x <= getWidth()/2 - ball.width) {	// 오른쪽 플레이어 득점
-							scoreBoard.rightScore += 1;
-							if(scoreBoard.rightScore >= 5) {
-								gameFinish(rightPlayer);
-								break;
-							}
-
-							gameReset(rightPlayer);		// 초기화
-							Thread.sleep(1000);
+					if(ball.x >= 0 && ballCenterX <= getWidth()/2) {	// 오른쪽 플레이어 득점
+						scoreBoard.rightScore += 1;
+						if(scoreBoard.rightScore >= 15) {
+							gameFinish(rightPlayer);
+							break;
 						}
-						else {								// 왼쪽 플레이어 득점
-							scoreBoard.leftScore += 1;
-							if(scoreBoard.leftScore >= 5) {
-								gameFinish(leftPlayer);
-								break;
-							}
-
-							gameReset(leftPlayer);		// 초기화
-							Thread.sleep(1000);
+						gameReset(rightPlayer);		// 초기화
+					}
+					else {								// 왼쪽 플레이어 득점
+						scoreBoard.leftScore += 1;
+						if(scoreBoard.leftScore >= 15) {
+							gameFinish(leftPlayer);
+							break;
 						}
-					} catch (InterruptedException e) {
-						e.printStackTrace();
+						gameReset(leftPlayer);		// 초기화
 					}
 				}
 
@@ -191,8 +189,11 @@ public class GamePanel extends JPanel {
 				ball.x += ball.moveX;
 				ball.y += ball.moveY;
 
+				ball.y += ball.gravity++/35;	// 공 중력 받음
+				repaint();
+
 				try {
-					Thread.sleep(2);
+					Thread.sleep(1, 70000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -277,6 +278,7 @@ public class GamePanel extends JPanel {
 			try {
 				while(true) {
 					keyProcess();
+					repaint();
 					Thread.sleep(3);
 				}
 			} catch (Exception e){
