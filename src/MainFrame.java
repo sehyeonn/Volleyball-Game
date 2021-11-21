@@ -1,4 +1,5 @@
-import java.awt.Container;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
 
@@ -8,13 +9,24 @@ import javax.swing.JFrame;
 
 public class MainFrame extends JFrame {
 	private GamePanel gamePanel = new GamePanel();
+	private StartPanel menuPanel = new StartPanel();
 
 	public MainFrame() {
 		setTitle("Valleyball game");
 
-		Container c = getContentPane();
-		c.setLayout(null);
-		c.add(gamePanel);
+		gamePanel.setVisible(false);
+		add(menuPanel);
+		add(gamePanel);
+		menuPanel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				menuPanel.setVisible(false);
+
+				gamePanel.setVisible(true);
+				gamePanel.requestFocus();
+				gamePanel.setFocusable(true);
+			}
+		});
 
 		setSize(1500, 1000);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

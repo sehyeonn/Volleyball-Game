@@ -7,7 +7,7 @@ public class Player {
 	 * 처음 좌표 및 이미지 기본 정보
 	 * 점프 기능 따로 구현
 	 */
-	final int PLAYER_UNIT = 5;		// 플레이어 이동 속도
+	final int PLAYER_UNIT = 5;		// 플레이어가 한 번에 이동하는 픽셀
 
 	int whatPlayer;		// 왼쪽 플레이어인지 오른쪽 플레이어인지 구분
 	final int RIGHT_PLAYER = 1;		// 오른쪽 플레이어
@@ -78,7 +78,7 @@ public class Player {
 					y -= PLAYER_UNIT;
 					y += gravity++/20;	// 중력을 받아 서서히 떨어짐
 					Thread.sleep(2);
-				} while(y < groundY && isJump);
+				} while(y < groundY && isJump);	// 서서히 떨어지다 바닥에 도달하면 점프 끝
 			} catch (InterruptedException e) { e.printStackTrace(); }
 			isJump = false;
 			y = groundY;
