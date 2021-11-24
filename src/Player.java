@@ -24,11 +24,10 @@ public class Player {
 	int width;
 	int height;
 
-	int centerX = x + width/2;		// 플레이어의 중심 x 좌표
-	int centerY = y + height/2;		// 플레이어의 중심 y 좌표
-
 	// true이면 점프 중
 	private boolean isJump = false;
+
+	boolean isSpike = false;	// 플레이어가 스파이크를 했는가
 
 	// 플레이어 생성자, 오른쪽 플레이어(1) 왼쪽 플레이어(2)를 매개 변수로 받아 처음 위치 지정
 	public Player(int p) {

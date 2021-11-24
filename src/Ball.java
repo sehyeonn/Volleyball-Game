@@ -22,9 +22,6 @@ public class Ball {
 	int width;
 	int height;
 
-	int centerX = x + width;
-	int centerY = y + height;
-
 	public Ball(Player player) {
 		x = player.x + 5;
 		y = 100;
@@ -44,5 +41,6 @@ public class Ball {
 		moveX = 0;
 		moveY = BALL_UNIT;
 		gravity = 0;
+		img = tk.getImage("ball.png");
 	}
 }

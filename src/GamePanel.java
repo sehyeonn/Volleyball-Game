@@ -7,6 +7,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JPanel;
 
@@ -168,14 +170,32 @@ public class GamePanel extends JPanel {
 
 				// 공이 플레이어와 충돌할 경우, 공과 플레이어의 각 좌표의 차를 이용해 충돌한 각도의 방향으로 공이 튀기게 함
 				if(ballRightPlayerDistance <= rightPlayer.width/2 + ball.width/2) {
-					ball.moveX = (ballCenterX - rightPlayerCenterX)/3/7;
-					ball.moveY = (ballCenterY - rightPlayerCenterY)/3/7;
-					ball.gravity = 0;	// 플레이어와 충돌 시 공 중력 초기화
+					if(rightPlayer.isSpike) {
+						ball.moveX = (ballCenterX - rightPlayerCenterX)/3/3;
+						ball.moveY = (ballCenterY - rightPlayerCenterY)/3/11;
+						ball.gravity = 0;	// 플레이어와 충돌 시 공 중력 초기화
+						ball.img = tk.getImage("spiked_ball.png");
+					}
+					else {
+						ball.moveX = (ballCenterX - rightPlayerCenterX)/3/7;
+						ball.moveY = (ballCenterY - rightPlayerCenterY)/3/7;
+						ball.gravity = 0;	// 플레이어와 충돌 시 공 중력 초기화
+						ball.img = tk.getImage("ball.png");
+					}
 				}
 				if(ballLeftPlayerDistance <= leftPlayer.width/2 + ball.width/2) {
-					ball.moveX = (ballCenterX - leftPlayerCenterX)/3/7;
-					ball.moveY = (ballCenterY - leftPlayerCenterY)/3/7;
-					ball.gravity = 0;	// 플레이어와 충돌 시 공 중력 초기화
+					if(leftPlayer.isSpike) {
+						ball.moveX = (ballCenterX - leftPlayerCenterX)/3/3;
+						ball.moveY = (ballCenterY - leftPlayerCenterY)/3/11;
+						ball.gravity = 0;	// 플레이어와 충돌 시 공 중력 초기화
+						ball.img = tk.getImage("spiked_ball.png");
+					}
+					else {
+						ball.moveX = (ballCenterX - leftPlayerCenterX)/3/7;
+						ball.moveY = (ballCenterY - leftPlayerCenterY)/3/7;
+						ball.gravity = 0;	// 플레이어와 충돌 시 공 중력 초기화
+						ball.img = tk.getImage("ball.png");
+					}
 				}
 
 				// 공이 벽과 충돌할 경우
@@ -221,7 +241,7 @@ public class GamePanel extends JPanel {
 				repaint();
 
 				try {
-					Thread.sleep(1, 100000);	// 공의 속도, 해당 시간마다 이동
+					Thread.sleep(1, 200000);	// 공의 속도, 해당 시간마다 이동
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -267,6 +287,18 @@ public class GamePanel extends JPanel {
 			case KeyEvent.VK_RIGHT :
 				rightKeyRight = true;
 				break;
+			case KeyEvent.VK_ENTER:
+				rightPlayer.isSpike = true;
+				Timer timer = new Timer();
+				TimerTask task = new TimerTask() {
+					@Override
+					public void run() {
+						rightPlayer.isSpike = false;
+						timer.cancel();
+					}
+				};
+				timer.schedule(task, 300);
+				break;
 			}
 			switch (e.getKeyCode()) {	// 왼쪽 플레이어 키 입력
 			case KeyEvent.VK_W :
@@ -277,6 +309,18 @@ public class GamePanel extends JPanel {
 				break;
 			case KeyEvent.VK_D :
 				leftKeyRight = true;
+				break;
+			case KeyEvent.VK_T:
+				leftPlayer.isSpike = true;
+				Timer timer = new Timer();
+				TimerTask task = new TimerTask() {
+					@Override
+					public void run() {
+						leftPlayer.isSpike = false;
+						timer.cancel();
+					}
+				};
+				timer.schedule(task, 300);
 				break;
 			}
 		}
