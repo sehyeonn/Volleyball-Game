@@ -7,9 +7,13 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.JPanel;
 
 /*
@@ -70,7 +74,7 @@ public class GamePanel extends JPanel {
 				if(isFinished) {
 					scoreBoard.leftScore = 0;
 					scoreBoard.rightScore = 0;
-					winMessage = "";
+					winMessage = "";		// 게임 결과 메세지 초기화
 					gameReset(rightPlayer);
 
 					bth = new BallThread();
@@ -170,7 +174,7 @@ public class GamePanel extends JPanel {
 
 				// 공이 플레이어와 충돌할 경우, 공과 플레이어의 각 좌표의 차를 이용해 충돌한 각도의 방향으로 공이 튀기게 함
 				if(ballRightPlayerDistance <= rightPlayer.width/2 + ball.width/2) {
-					if(rightPlayer.isSpike) {
+					if(rightPlayer.isSpike) {	// 스파이크일 시
 						ball.moveX = (ballCenterX - rightPlayerCenterX)/3/3;
 						ball.moveY = (ballCenterY - rightPlayerCenterY)/3/11;
 						ball.gravity = 0;	// 플레이어와 충돌 시 공 중력 초기화
@@ -184,7 +188,7 @@ public class GamePanel extends JPanel {
 					}
 				}
 				if(ballLeftPlayerDistance <= leftPlayer.width/2 + ball.width/2) {
-					if(leftPlayer.isSpike) {
+					if(leftPlayer.isSpike) {	// 스파이크일 시
 						ball.moveX = (ballCenterX - leftPlayerCenterX)/3/3;
 						ball.moveY = (ballCenterY - leftPlayerCenterY)/3/11;
 						ball.gravity = 0;	// 플레이어와 충돌 시 공 중력 초기화
@@ -222,6 +226,14 @@ public class GamePanel extends JPanel {
 							gameFinish(rightPlayer);
 							break;
 						}
+						try {	// 효과음 재생
+							AudioInputStream as = AudioSystem.getAudioInputStream(new File("get_score.wav"));
+							Clip clip = AudioSystem.getClip();
+							clip.stop();
+							clip.open(as);
+							clip.start();
+						}catch(Exception e) { e.printStackTrace(); }
+
 						gameReset(rightPlayer);		// 초기화
 					}
 					else {								// 왼쪽 플레이어 득점
@@ -230,6 +242,14 @@ public class GamePanel extends JPanel {
 							gameFinish(leftPlayer);
 							break;
 						}
+						try {	// 효과음 재생
+							AudioInputStream as = AudioSystem.getAudioInputStream(new File("get_score.wav"));
+							Clip clip = AudioSystem.getClip();
+							clip.stop();
+							clip.open(as);
+							clip.start();
+						}catch(Exception e) { e.printStackTrace(); }
+
 						gameReset(leftPlayer);		// 초기화
 					}
 				}

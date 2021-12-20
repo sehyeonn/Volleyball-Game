@@ -21,7 +21,6 @@ public class MainFrame extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				menuPanel.setVisible(false);
-
 				gamePanel.setVisible(true);
 				gamePanel.requestFocus();
 				gamePanel.setFocusable(true);
