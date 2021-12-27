@@ -174,39 +174,34 @@ public class GamePanel extends JPanel {
 
 				// 공이 플레이어와 충돌할 경우, 공과 플레이어의 각 좌표의 차를 이용해 충돌한 각도의 방향으로 공이 튀기게 함
 				if(ballRightPlayerDistance <= rightPlayer.width/2 + ball.width/2) {
-					if(rightPlayer.isSpike) {	// 스파이크일 시
-						ball.moveX = (ballCenterX - rightPlayerCenterX)/3/3;
-						ball.moveY = (ballCenterY - rightPlayerCenterY)/3/11;
-						ball.gravity = 0;	// 플레이어와 충돌 시 공 중력 초기화
-						ball.img = tk.getImage("spiked_ball.png");
-					}
-					else {
-						ball.moveX = (ballCenterX - rightPlayerCenterX)/3/7;
-						ball.moveY = (ballCenterY - rightPlayerCenterY)/3/7;
-						ball.gravity = 0;	// 플레이어와 충돌 시 공 중력 초기화
-						ball.img = tk.getImage("ball.png");
-					}
+					//if(rightPlayer.isSpike) {	// 스파이크일 시
+					//	ball.moveX = (ballCenterX - rightPlayerCenterX)/3/3;
+					//	ball.moveY = (ballCenterY - rightPlayerCenterY)/3/11;
+					//	ball.gravity = 0;	// 플레이어와 충돌 시 공 중력 초기화
+					//	ball.img = tk.getImage("spiked_ball.png");
+					//}
+					//else {
+					ball.moveX = (ballCenterX - rightPlayerCenterX)/3/7;
+					ball.moveY = (ballCenterY - rightPlayerCenterY)/3/7;
+					ball.gravity = 0;	// 플레이어와 충돌 시 공 중력 초기화
+					//	ball.img = tk.getImage("ball.png");
+					//}
 				}
 				if(ballLeftPlayerDistance <= leftPlayer.width/2 + ball.width/2) {
-					if(leftPlayer.isSpike) {	// 스파이크일 시
-						ball.moveX = (ballCenterX - leftPlayerCenterX)/3/3;
-						ball.moveY = (ballCenterY - leftPlayerCenterY)/3/11;
-						ball.gravity = 0;	// 플레이어와 충돌 시 공 중력 초기화
-						ball.img = tk.getImage("spiked_ball.png");
-					}
-					else {
+					//if(leftPlayer.isSpike) {	// 스파이크일 시
+					//	ball.moveX = (ballCenterX - leftPlayerCenterX)/3/3;
+					//	ball.moveY = (ballCenterY - leftPlayerCenterY)/3/11;
+					//	ball.gravity = 0;	// 플레이어와 충돌 시 공 중력 초기화
+					//	ball.img = tk.getImage("spiked_ball.png");
+					//}
+					//else {
 						ball.moveX = (ballCenterX - leftPlayerCenterX)/3/7;
 						ball.moveY = (ballCenterY - leftPlayerCenterY)/3/7;
 						ball.gravity = 0;	// 플레이어와 충돌 시 공 중력 초기화
-						ball.img = tk.getImage("ball.png");
-					}
+					//	ball.img = tk.getImage("ball.png");
+					//}
 				}
 
-				// 공이 벽과 충돌할 경우
-//				if(ball.y <= 0) {		// 천장 충돌
-//					ball.moveY = -ball.moveY;
-//					ball.gravity = 0;	// 천장과 충돌 시 공 중력 초기화
-//				}
 				if(ball.x <= 0)		// 왼쪽 벽 충돌
 					ball.moveX = -ball.moveX;
 				if(ball.x >= getWidth() - ball.width)	// 오른쪽 벽 충돌
