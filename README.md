@@ -1,10 +1,10 @@
 # Volleyball-Game
 -------------
-This is a two-player valley ball game uses the ball bouncing against walls and players.
+공이 벽과 플레이어에 튕기는 것을 이용한 2인용 배구 게임
 
 ![화면 캡처 2021-12-30 193803](https://user-images.githubusercontent.com/88087225/147747993-71a02d7e-0c35-4aab-ab53-9b2fdd44eaf4.png)
 
-## Game play
+## 게임플레이
 ### Control
 - 1p
   - move
@@ -17,6 +17,39 @@ This is a two-player valley ball game uses the ball bouncing against walls and p
   - jump
     - W
 ### Rules
-- When the game starts, 1p serves first, and after that, the player who gets score serves
-- The player who gets 15 score first wins
-- The ball bounces if it touches walls, net in the center, players. And you can keep going if the ball hasn't touched the floor yet.
+- 게임이 시작되면 먼저 1p가 서브권을 가집니다. 이후로는 점수를 획득한 플레이어가 서브권을 가집니다.
+- 15점을 먼저 획득한 플레이어가 최종적으로 승리합니다.
+- 공은 플레이어, 벽, 네트에 맞아 튕길 수 있으며, 공이 바닥에만 닿지 않는다면 게임은 끝나지 않습니다.
+
+---------------
+
+## 클래스 구성
+### MainFrame
+- 메인함수가 있으며 JFrame을 상속받는 클래스
+- 게임이 진행되는 GamePanel클래스와 시작 화면인 StartPanel을 생성하고 부착
+- 게임을 시작하면 GamePanel을 보이게 하고 StartPanel을 보이지 않게 함
+
+### StartPanel
+- 게임 시작 화면, 이미지만 가지고 있음
+
+### GamePanel
+- 게임이 진행되는 패널
+- 키보드 조작, 플레이어의 이동(점프 제외), 공의 이동, 점수 획득, 게임 재시작 구현
+- 더블 버퍼링 방식을 이용하여 모든 이미지를 화면에 출력
+
+### Player
+- 플레이어의 기본 정보(좌표, 크기, 이미지)를 담고 있는 클래스
+- 점프 기능은 2인용 게임이기에 GamePanel에서 구현 시 코드가 복잡해질 것 같아 Player 클래스 메소드로 구현
+
+### Ball
+- 공의 기본 정보(좌표, 크기, 이미지, 속도)를 담고 있는 클래스
+
+### ScoreBoard
+- 점수판 클래스, 각 플레이어의 점수, 점수판 이미지, 크기를 담고 있음
+
+----------------
+
+## 어려웠던 점
+- 굉장히 작지만 처음 만들어본 프로젝트였기에 전체적으로 부족함이 많이 보인다.
+- 클래스를 보기 좋고 유지보수가 용이하게 구성하는 것이 어려운 것 같다. 현재 코드는 함수화, 모듈화(?)가 잘 되어있지 않고 정리되어있지 않아 뒤죽박죽인 느낌이 든다.
+- 공이 네트에 닿았을 때 가끔 네트 안에서 공이 여러번 튕기는 버그가 있다. 네트의 범위와 공의 이동 좌표가 겹칠 때 생기는 것으로 추정되고, 추가적인 요소를 추가하거나 방식을 변경하여야 할 것 같지만 아직 해결하지 못했다.
